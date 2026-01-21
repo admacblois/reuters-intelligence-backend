@@ -1,6 +1,6 @@
-langchain
-langchain-community
-langchain-openai
-chromadb
-pandas
-tiktoken
+fastapi
+uvicorn
+pydantic
+supabase
+openai
+python-dotenv

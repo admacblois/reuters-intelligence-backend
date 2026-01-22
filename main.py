@@ -58,7 +58,7 @@ def read_root():
 @app.post("/api/v1/search", response_model=IntelligenceResponse)
 async def search_intelligence(payload: QueryRequest):
     try:
-        print(f"Buscando por: {payload.query}")
+        print(f"Searching for: {payload.query}")
         
         # 1. Gerar Embedding da pergunta
         query_vector = get_embedding(payload.query)
@@ -66,18 +66,18 @@ async def search_intelligence(payload: QueryRequest):
         # 2. Buscar no Supabase
         response = supabase.rpc("match_documents", {
             "query_embedding": query_vector,
-            "match_threshold": 0.1, # Mantivemos baixo para garantir resultados
+            "match_threshold": 0.1, 
             "match_count": 5
         }).execute()
         
         matches = response.data
         
-        # Se não achou nada
+        # Se não achou nada (Fallback em Inglês)
         if not matches:
             return {
                 "status": "success",
                 "data": {
-                    "summary": "Não encontrei informações sobre isso nos manuais técnicos atuais (WNE, FTP, Liaison). Tente reformular a pergunta.",
+                    "summary": "I could not find information about this in the current technical manuals (WNE, FTP, Liaison). Please try rephrasing your question.",
                     "confidence_score": 0.0,
                     "sources": [],
                     "related_queries": []
@@ -92,42 +92,43 @@ async def search_intelligence(payload: QueryRequest):
             meta = match.get("metadata", {})
             sources_list.append({
                 "id": str(match.get("id")),
-                "title": meta.get("title", "Sem título"),
+                "title": meta.get("title", "Untitled"),
                 "url": meta.get("url", "#"),
                 "type": "doc"
             })
             # Adiciona o trecho ao contexto que o GPT vai ler
-            context_text += f"Documento: {meta.get('title')}\nConteúdo: {match.get('content')}\n---\n"
+            context_text += f"Document: {meta.get('title')}\nContent: {match.get('content')}\n---\n"
 
-        # 4. A MÁGICA: Gerar a resposta com GPT-4o
-        print("🧠 Gerando resposta com IA...")
+        # 4. A MÁGICA: Gerar a resposta com GPT-4o (Agora 100% em Inglês)
+        print("🧠 Generating AI response...")
         
+        # --- AQUI ESTÁ A MUDANÇA CRÍTICA ---
         system_prompt = """
-        Você é o Assistente de Engenharia de Plataformas da Reuters.
-        Sua função é responder dúvidas técnicas baseando-se ESTRITAMENTE no contexto fornecido.
+        You are the Reuters Platform Engineering Assistant.
+        Your role is to answer technical questions based STRICTLY on the provided context.
         
-        Diretrizes:
-        1. Seja direto, técnico e profissional.
-        2. Se a informação estiver no contexto, explique-a claramente.
-        3. Se o contexto mencionar passos ou configurações (IPs, portas, hardware), liste-os em tópicos.
-        4. Cite qual manual contém a informação (ex: "Segundo o manual de Instalação do DL360...").
-        5. Se a resposta não estiver no contexto, diga que não sabe. NÃO invente.
+        CRITICAL GUIDELINES:
+        1. LANGUAGE: You must ALWAYS answer in ENGLISH. Even if the user asks in Portuguese, Spanish, or any other language, your output must be in professional technical English.
+        2. Be direct, technical, and professional.
+        3. If the context mentions steps or configurations (IPs, ports, hardware), list them in bullet points.
+        4. Cite which manual contains the information (e.g., "According to the DL360 Installation Manual...").
+        5. If the answer is not in the context, state that you do not have that information. DO NOT invent information.
         """
 
         user_prompt = f"""
-        Pergunta do Usuário: {payload.query}
+        User Question: {payload.query}
 
-        Contexto Recuperado dos Manuais:
+        Context Retrieved from Manuals:
         {context_text}
         """
 
         completion = openai_client.chat.completions.create(
-            model="gpt-4o", # O modelo mais inteligente
+            model="gpt-4o", 
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            temperature=0.2 # Baixa temperatura = Mais precisão, menos alucinação
+            temperature=0.2 
         )
 
         final_answer = completion.choices[0].message.content
@@ -135,13 +136,13 @@ async def search_intelligence(payload: QueryRequest):
         return {
             "status": "success",
             "data": {
-                "summary": final_answer, # A resposta inteligente vem aqui!
+                "summary": final_answer, 
                 "confidence_score": matches[0].get("similarity", 0.0),
                 "sources": sources_list,
-                "related_queries": ["Especificações de Hardware", "Configuração de Rede"] 
+                "related_queries": ["Hardware Specifications", "Network Configuration"] 
             }
         }
 
     except Exception as e:
-        print(f"Erro no processamento: {e}")
+        print(f"Error processing request: {e}")
         raise HTTPException(status_code=500, detail=str(e))

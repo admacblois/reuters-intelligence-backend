@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reuters Intelligence - Executive Summary</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        :root {
+            --reuters-orange: #FF8000;
+            --reuters-black: #111111;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #fff;
+            -webkit-print-color-adjust: exact; /* Garante que cores de fundo saiam na impressão */
+        }
+
+        /* ----- HEADER ----- */
+        header {
+            background-color: var(--reuters-black);
+            /* Link para sua imagem renomeada */
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('header.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 60px;
+            border-bottom: 6px solid var(--reuters-orange);
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin: 0;
+            letter-spacing: -2px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        h1 span { color: var(--reuters-orange); }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-top: 15px;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px;
+        }
+
+        /* Intro Box */
+        .intro-box {
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: #111;
+            border-left: 5px solid var(--reuters-black);
+            padding-left: 25px;
+            margin: 20px 0 50px 0;
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 1.8rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            color: var(--reuters-black);
+            font-weight: 800;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-icon { 
+            background: var(--reuters-orange); 
+            color: white; 
+            width: 40px; height: 40px; 
+            display: inline-flex; justify-content: center; align-items: center; 
+            border-radius: 50%; margin-right: 15px; font-size: 1.2rem; 
+        }
+
+        /* Diagrama Lógico */
+        .diagram {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #f8f9fa; padding: 30px; border-radius: 12px;
+            margin: 30px 0; text-align: center; border: 1px solid #e9ecef;
+        }
+        .node { 
+            background: white; border: 2px solid #ced4da; padding: 15px 20px; 
+            border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: 600; 
+            width: 25%;
+        }
+        .arrow { color: var(--reuters-orange); font-size: 2rem; font-weight: bold; }
+
+        /* Layout de Segurança (Texto + Imagem) */
+        .security-layout {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        .security-content { flex: 1.5; }
+        .security-image-box {
+            flex: 1;
+            height: 300px;
+            /* Link para sua imagem renomeada */
+            background-image: url('security.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border: 4px solid white;
+        }
+
+        .highlight-item { margin-bottom: 20px; }
+        .highlight-item h3 { margin: 0 0 5px 0; color: var(--reuters-orange); font-size: 1.2rem; }
+        .highlight-item p { margin: 0; font-size: 1rem; color: #555; }
+
+        /* ROI Section (Dark Mode) */
+        .roi-section {
+            margin-top: 60px;
+            background-color: var(--reuters-black);
+            /* Link para sua imagem renomeada */
+            background-image: linear-gradient(rgba(17,17,17,0.9), rgba(17,17,17,0.8)), url('roi.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 50px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .grid-3 {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card-number { font-size: 3rem; font-weight: 900; color: var(--reuters-orange); display: block; margin-bottom: 5px; }
+        .card-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+
+        /* Roadmap */
+        ul.roadmap { list-style: none; padding: 0; margin-top: 20px; }
+        ul.roadmap li {
+            padding: 15px 0; border-bottom: 1px solid #eee;
+            display: flex; align-items: flex-start; font-size: 1.1rem;
+        }
+        ul.roadmap li strong { color: var(--reuters-black); margin-right: 5px; }
+        ul.roadmap li:before {
+            content: "📍"; margin-right: 15px;
+        }
+        ul.roadmap li.done:before { content: "✅"; }
+
+        footer { 
+            text-align: center; padding: 40px; font-size: 0.85rem; color: #999; 
+            margin-top: 80px; border-top: 1px solid #eee; 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Reuters <span>Intelligence</span></h1>
+        <div class="subtitle">AI-Powered Technical Support Architecture | Executive Summary</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="intro-box">
+            Reuters Intelligence is a <strong>Retrieval-Augmented Generation (RAG)</strong> platform designed to replace keyword search with semantic understanding, reducing "Time-to-Resolution" from minutes to seconds.
+        </div>
+
+        <div class="section-title"><span class="section-icon">1</span> MVP Delivery Status</div>
+        <p>We have successfully deployed a production-grade Proof of Concept (POC) capable of:</p>
+        
+        <div class="diagram">
+            <div class="node">User Query<br><small>"How to install DL360?"</small></div>
+            <div class="arrow">➔</div>
+            <div class="node" style="border-color: var(--reuters-orange); background: #fffbf5;">Reuters Intelligence<br><small>FastAPI + Vector DB</small></div>
+            <div class="arrow">➔</div>
+            <div class="node">Instant Answer<br><small>Synthesized + Cited</small></div>
+        </div>
+
+        <div class="section-title"><span class="section-icon">2</span> Enterprise Readiness Pillars</div>
+        
+        <div class="security-layout">
+            <div class="security-content">
+                <div class="highlight-item">
+                    <h3>Security & Compliance (PII)</h3>
+                    <p>Integrated <strong>Microsoft Presidio</strong> layer to strip sensitive data (names, IPs) <em>before</em> data leaves the perimeter. Zero-training policy on public models.</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>Containerized Architecture</h3>
+                    <p>Docker-ready. Allows for immediate "lift-and-shift" deployment from POC to Reuters' private VPC (AWS/Azure).</p>
+                </div>
+                <div class="highlight-item">
+                    <h3>Global Scalability</h3>
+                    <p>Uses <strong>HNSW Indexing</strong> for sub-second search latency, whether searching 100 documents or 1 million case histories.</p>
+                </div>
+            </div>
+            <div class="security-image-box"></div>
+        </div>
+
+        <div class="roi-section">
+            <h2 style="margin:0; text-transform: uppercase; letter-spacing: 2px;">Business Impact (ROI)</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <span class="card-number">30%</span>
+                    <span class="card-label">Est. Ticket Deflection</span>
+                </div>
+                <div class="card">
+                    <span class="card-number">&lt;1s</span>
+                    <span class="card-label">Search Latency</span>
+                </div>
+                <div class="card">
+                    <span class="card-number">100%</span>
+                    <span class="card-label">Data Privacy</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title"><span class="section-icon">3</span> Roadmap & Next Steps</div>
+        <ul class="roadmap">
+            <li class="done"><strong>Phase 1 (Complete):</strong> MVP Backend + UI Deployment.</li>
+            <li><strong>Phase 2:</strong> Ingest Salesforce Case History (with PII stripping).</li>
+            <li><strong>Phase 3:</strong> Internal Pilot via Microsoft Teams bot.</li>
+        </ul>
+
+    </div>
+
+    <footer>
+        <p>Developed by Technical Operations | Proof of Concept 2026 | Reuters Confidential</p>
+    </footer>
+
+</body>
+</html>
